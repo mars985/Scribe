@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BottomNavigation, Text } from "react-native-paper";
 
-const MusicRoute = () => <Text>Music</Text>;
+const MusicRoute = () => <Text>Home</Text>;
 
 const AlbumsRoute = () => <Text>Albums</Text>;
 

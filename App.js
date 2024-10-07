@@ -39,17 +39,19 @@ import { Provider as PaperProvider } from "react-native-paper";
 import { View, Text } from "react-native";
 
 import Tabs from "./src/Tabs";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import SafeViewAndroid from "./src/components/SafeViewAndroid";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
+  
   return (
-    <SafeAreaProvider>
+    <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>
       <PaperProvider>
         {/* <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <Text>Hello, React Native Paper!</Text>
         </View> */}
         <Tabs />
       </PaperProvider>
-    </SafeAreaProvider>
+    </SafeAreaView>
   );
 }
