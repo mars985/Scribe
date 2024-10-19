@@ -1,11 +1,14 @@
 import * as React from "react";
 import { BottomNavigation, Text } from "react-native-paper";
 
-const MusicRoute = () => <Text>Home</Text>;
+import Test from './screens/TasksScreen'
 
-const AlbumsRoute = () => <Text>Albums</Text>;
+// const HomeRoute = () => <Text>Journal</Text>;
+const HomeRoute = () => <Test/>
 
-const RecentsRoute = () => <Text>Recents</Text>;
+const TasksRoute = () => <Text>Tasks</Text>;
+
+const SettingsRoute = () => <Text>Settings</Text>;
 
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
@@ -13,13 +16,23 @@ const MyComponent = () => {
   const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
-      key: "home",
-      title: "Home",
-      focusedIcon: "home",
-      unfocusedIcon: "home-outline",
+      key: "journal",
+      title: "Journal",
+      focusedIcon: "book",
+      unfocusedIcon: "book-outline",
     },
-    { key: "albums", title: "Albums", focusedIcon: "album" },
-    { key: "recents", title: "Recents", focusedIcon: "history" },
+    {
+      key: "tasks",
+      title: "Tasks",
+      focusedIcon: "calendar-check",
+      unfocusedIcon: "calendar-check-outline",
+    },
+    {
+      key: "settings",
+      title: "Settings",
+      focusedIcon: "cog",
+      unfocusedIcon: "cog-outline",
+    },
     {
       key: "notifications",
       title: "Notifications",
@@ -29,9 +42,9 @@ const MyComponent = () => {
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
-    home: MusicRoute,
-    albums: AlbumsRoute,
-    recents: RecentsRoute,
+    journal: HomeRoute,
+    tasks: TasksRoute,
+    settings: SettingsRoute,
     notifications: NotificationsRoute,
   });
 
