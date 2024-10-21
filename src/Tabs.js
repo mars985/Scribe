@@ -1,12 +1,11 @@
 import * as React from "react";
 import { BottomNavigation, Text } from "react-native-paper";
 
-import Test from './screens/TasksScreen'
+import TasksScreen from './screens/TasksScreen'
 
-// const HomeRoute = () => <Text>Journal</Text>;
-const HomeRoute = () => <Test/>
+const HomeRoute = () => <Text>Journal</Text>;
 
-const TasksRoute = () => <Text>Tasks</Text>;
+const TasksRoute = () => <TasksScreen/>
 
 const SettingsRoute = () => <Text>Settings</Text>;
 
