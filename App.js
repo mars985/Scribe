@@ -17,8 +17,8 @@ export default function App() {
   );
 }
 
-import { getDate } from "./src/database/util.js";
+import { getCurrentDate } from "./src/database/util.js";
 
 function logg() {
-  console.log(getDate());
+  console.log(getCurrentDate());
 }

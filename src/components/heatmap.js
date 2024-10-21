@@ -1,27 +1,24 @@
-// import React from 'react';
-// import HeatMap from '@uiw/react-heat-map';
+import React from "react";
+import CalendarHeatmap from "react-native-calendar-heatmap";
 
-// const value = [
-//   { date: '2016/01/11', count: 2 },
-//   { date: '2016/01/12', count: 20 },
-//   { date: '2016/01/13', count: 10 },
-//   ...[...Array(17)].map((_, idx) => ({ date: `2016/02/${idx + 10}`, count: idx, content: '' })),
-//   { date: '2016/04/11', count: 2 },
-//   { date: '2016/05/01', count: 5 },
-//   { date: '2016/05/02', count: 5 },
-//   { date: '2016/05/04', count: 11 },
-// ];
+const data = [
+  { date: "2024-10-01", count: 1 },
+  { date: "2024-10-02", count: 2 },
+  { date: "2024-10-03", count: 3 },
+  { date: "2024-10-04", count: 4 },
+  { date: "2024-10-05", count: 0 },
+  { date: "2024-10-06", count: 2 },
+  // Add more data points as needed
+];
 
-// const Demo = () => {
-//   return (
-//     <div>
-//       <HeatMap
-//         value={value}
-//         weekLabels={['', 'Mon', '', 'Wed', '', 'Fri', '']}
-//         startDate={new Date('2016/01/01')}
-//       />
-//     </div>
-//   )
-// };
+const heat = () => {
+  return (
+    <CalendarHeatmap
+      endDate={new Date("2024-10-21")}
+      numDays={100}
+      values={data}
+    />
+  );
+};
 
-// export default Demo
+export default heat;
