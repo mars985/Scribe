@@ -1,7 +1,6 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, PaperProvider, Portal } from "react-native-paper";
-import MyFab from "../components/MyFAB";
 import Heatmap from "../components/heatmap";
 import { FAB } from "react-native-paper";
 
