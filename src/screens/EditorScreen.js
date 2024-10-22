@@ -26,7 +26,6 @@ const EditorScreen = ({ route }) => {
           onSave={onSave}
         />
       </View>
-      
     </View>
   );
 };
@@ -44,7 +43,7 @@ const onSave = async (postHeading, contentToSave, postIndex) => {
       });
     } else {
       // Save new post
-      await savePost({ content: contentToSave, heading:postHeading });
+      await savePost({ content: contentToSave, heading: postHeading });
     }
   } catch (error) {
     console.error("Error saving content", error);

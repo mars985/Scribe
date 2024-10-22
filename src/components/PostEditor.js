@@ -13,7 +13,7 @@ import {
   useEditorContent,
 } from "@10play/tentap-editor";
 
-export const PostEditor = ({ postIndex,postHeading, postContent, onSave }) => {
+export const PostEditor = ({ postIndex, postHeading, postContent, onSave }) => {
   const initialContent = postContent ? postContent : `<p>No data found</p>`;
 
   const editor = useEditorBridge({
@@ -30,6 +30,7 @@ export const PostEditor = ({ postIndex,postHeading, postContent, onSave }) => {
   return (
     <SafeAreaView style={exampleStyles.fullScreen}>
       <RichText editor={editor} />
+      {/* <View style={{ height: 200 }} /> */}
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={exampleStyles.keyboardAvoidingView}

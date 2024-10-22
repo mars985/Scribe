@@ -1,6 +1,6 @@
-import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { Card, Title } from 'react-native-paper';
+import React from "react";
+import { View, StyleSheet, Text } from "react-native";
+import { Card, Title } from "react-native-paper";
 
 const TextPost = ({ heading, content, onPress }) => {
   return (
@@ -25,16 +25,16 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 4,
   },
   contentContainer: {
-    position: 'relative',
+    position: "relative",
   },
   content: {
     fontSize: 14,
     lineHeight: 20,
-    color: '#333',
+    color: "#333",
   },
 });
 

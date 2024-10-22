@@ -57,6 +57,7 @@ const component = () => {
 const commitsData = [
   { date: "2024-08-30", count: 4 },
   { date: "2024-09-05", count: 2 },
+  { date: "2024-09-15", count: 3 },
   { date: "2024-10-01", count: 2 },
   { date: "2024-10-02", count: 1 },
   { date: "2024-10-03", count: 2 },
@@ -68,10 +69,13 @@ const commitsData = [
 ];
 
 const chartConfig = {
-  color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+  color: (opacity = 1) => `rgba(38, 70, 83, ${opacity})`,
   strokeWidth: 2, // optional, default 3
   barPercentage: 0.5,
   useShadowColorFromDataset: false, // optional
+  backgroundColor: "#F8F3F9",
+  backgroundGradientFrom: "#F8F3F9",
+  backgroundGradientTo: "#F8F3F9",
 };
 
 const component2 = () => {
