@@ -1,84 +1,60 @@
-// import React from "react";
-// import { ScrollView, StyleSheet, View } from "react-native";
-// import { PaperProvider } from "react-native-paper";
-// import PostCard from "../components/PostCard";
-// import MyFAB from "../components/MyFAB";
-// import { useNavigation } from "@react-navigation/native";
-// import { getPosts } from "../database/storageJournal";
-
-// const JournalScreen = () => {
-//   const navigation = useNavigation();
-
-//   // const journalpostsArray = await getPosts();
-//   const journalpostsArray = [
-//     {
-//       heading: "2024-10-29 13.00",
-//       content:
-//         "Mauris vel mi sed nulla fringilla consectetur. Etiam aliquet turpis quis ligula sodales, a tincidunt nisl scelerisque. Proin blandit, nulla sit amet scelerisque dapibus, libero magna aliquam nunc, vel faucibus purus eros eget libero.",
-//     },
-//     {
-//       heading: "2024-10-30 10.30",
-//       content:
-//         "Fusce euismod ex sit amet justo auctor, eu pretium nisi aliquet. Nulla sollicitudin nec libero nec mollis. Ut ac urna a justo scelerisque sollicitudin ut vitae ligula.",
-//     },
-//   ];
-
-//   return (
-//     <PaperProvider>
-//       <View style={{ flex: 1 }}>
-//         <ScrollView style={styles.scrollView}>
-//           {journalpostsArray.map((post, index) => (
-//             <View style={{ padding: 10 }} key={index}>
-//               <PostCard
-//                 heading={post.heading}
-//                 content={post.content}
-//                 onPress={() => {
-//                   navigation.navigate("Editor", {
-//                     postHeading: post.heading,
-//                     postContent: post.content,
-//                     postIndex: index,
-//                   });
-//                 }}
-//               />
-//             </View>
-//           ))}
-//         </ScrollView>
-
-//         <MyFAB />
-//       </View>
-//     </PaperProvider>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   scrollView: {
-//     flex: 1,
-//     backgroundColor: "#F5F4F4",
-//   },
-// });
-
-// export default JournalScreen;
-
-import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet, Pressable, View, Alert } from "react-native";
 import { PaperProvider } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect } from "@react-navigation/native";
+
 import PostCard from "../components/PostCard";
 import MyFAB from "../components/MyFAB";
-import { useNavigation } from "@react-navigation/native";
-import { getPosts } from "../database/storageJournal";
+import { deletePost, getPosts, savePost } from "../database/storageJournal";
+import { getCurrentDate, getCurrentTime } from "../database/util";
 
 const JournalScreen = () => {
   const navigation = useNavigation();
   const [journalpostsArray, setJournalPostsArray] = useState([]);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const posts = await getPosts();
-      setJournalPostsArray(posts);
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchAndSetPosts = async () => {
+        const posts = await getPosts();
+        setJournalPostsArray(posts);
+      };
 
-    fetchPosts();
-  }, []);
+      fetchAndSetPosts();
+    }, [])
+  );
+
+  const deleteThisPost = async (postIndex) => {
+    await deletePost(postIndex);
+    setPost();
+  };
+
+  const setPost = async () => setJournalPostsArray(await getPosts());
+
+  const showDeleteAlert = (index) => {
+    Alert.alert("Delete Post", "Are you sure you want to delete?", [
+      {
+        text: "Cancel",
+        onPress: () => console.log("Cancel Pressed"),
+        style: "cancel",
+      },
+      {
+        text: "OK",
+        onPress: () => deleteThisPost(index),
+        style: "destructive",
+      },
+    ]);
+  };
+
+  const createNewPost = async () => {
+    const newHeading = getCurrentDate() + " " + getCurrentTime();
+    const newContent = "";
+
+    const newPost = { heading: newHeading, content: newContent };
+    await savePost(newPost);
+    await setPost();
+    // console.log(newPost);
+  };
 
   return (
     <PaperProvider>
@@ -86,17 +62,7 @@ const JournalScreen = () => {
         <ScrollView style={styles.scrollView}>
           {journalpostsArray.map((post, index) => (
             <View style={{ paddingTop: 10, paddingHorizontal: 10 }} key={index}>
-              <PostCard
-                heading={
-                  typeof post.heading === "string"
-                    ? post.heading
-                    : JSON.stringify(post.heading)
-                } // Ensure heading is a string
-                content={
-                  typeof post.content === "string"
-                    ? post.content
-                    : JSON.stringify(post.content)
-                } // Ensure content is a string
+              <Pressable
                 onPress={() => {
                   navigation.navigate("Editor", {
                     postHeading: post.heading,
@@ -104,12 +70,26 @@ const JournalScreen = () => {
                     postIndex: index,
                   });
                 }}
-              />
+                onLongPress={() => showDeleteAlert(index)}
+              >
+                <PostCard
+                  heading={
+                    typeof post.heading === "string"
+                      ? post.heading
+                      : JSON.stringify(post.heading)
+                  }
+                  content={
+                    typeof post.content === "string"
+                      ? post.content
+                      : JSON.stringify(post.content)
+                  }
+                />
+              </Pressable>
             </View>
           ))}
         </ScrollView>
 
-        <MyFAB />
+        <MyFAB icon="plus" label="Add" onPress={createNewPost} />
       </View>
     </PaperProvider>
   );

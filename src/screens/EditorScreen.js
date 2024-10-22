@@ -26,14 +26,13 @@ const EditorScreen = ({ route }) => {
           onSave={onSave}
         />
       </View>
+      
     </View>
   );
 };
 
-// const onSave = (content) => {
-//   console.log("new:\n" + content);
-// };
 import { savePost, updatePost } from "../database/storageJournal";
+import MyFAB from "../components/MyFAB";
 
 const onSave = async (postHeading, contentToSave, postIndex) => {
   try {
@@ -45,9 +44,8 @@ const onSave = async (postHeading, contentToSave, postIndex) => {
       });
     } else {
       // Save new post
-      await savePost({ content: contentToSave });
+      await savePost({ content: contentToSave, heading:postHeading });
     }
-    // onSave && onSave(); // Optionally, call onSave if provided as a prop
   } catch (error) {
     console.error("Error saving content", error);
   }
