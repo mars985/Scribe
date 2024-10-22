@@ -2,14 +2,13 @@ import React from "react";
 import { View } from "react-native";
 import { Text } from "react-native-paper";
 
-import { Basic } from "../components/Editor";
+import { PostEditor } from "../components/PostEditor";
 
-const EditorScreen = () => {
-
+const EditorScreen = ({heading, postcontent}) => {
   return (
     <View style={{ flex: 1 }}>
       {/* <Text>hello</Text> */}
-      <Basic />
+      <PostEditor postcontent={postcontent} />
     </View>
   );
 };

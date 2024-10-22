@@ -14,7 +14,11 @@ import {
   useEffect,
 } from "@10play/tentap-editor";
 
-export const Basic = () => {
+export const PostEditor = ({ postcontent }) => {
+  const initialContent = postcontent
+    ? postcontent
+    : `<p>This is a basic example!</p>`;
+
   const editor = useEditorBridge({
     autofocus: false,
     avoidIosKeyboard: true,
@@ -46,5 +50,3 @@ const exampleStyles = StyleSheet.create({
     bottom: 0,
   },
 });
-
-const initialContent = `<p>This is a basic example!</p>`;

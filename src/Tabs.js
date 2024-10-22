@@ -1,20 +1,22 @@
 import * as React from "react";
 import { BottomNavigation, Text } from "react-native-paper";
 
-import TasksScreen from './screens/TasksScreen'
-import JournalScreen from './screens/JournalScreen'
+import TasksScreen from "./screens/TasksScreen";
+import JournalScreen from "./screens/JournalScreen";
+import EditorScreen from "./screens/EditorScreen";
 
 // const HomeRoute = () => <Text>Journal</Text>;
-const HomeRoute = () => <JournalScreen/>;
+const HomeRoute = () => <JournalScreen />;
 
-const TasksRoute = () => <TasksScreen/>
+// const TasksRoute = () => <TasksScreen/>
+const TasksRoute = () => <EditorScreen postcontent="hello world" />;
 
 const SettingsRoute = () => <Text>Settings</Text>;
 
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
 const MyComponent = () => {
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(1);
   const [routes] = React.useState([
     {
       key: "journal",

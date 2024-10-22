@@ -2,9 +2,9 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { Card, Title } from 'react-native-paper';
 
-const TextPost = ({ heading, content }) => {
+const TextPost = ({ heading, content, onPress }) => {
   return (
-    <Card style={styles.card}>
+    <Card style={styles.card} onPress={onPress}>
       <Card.Content>
         <Title style={styles.heading}>{heading}</Title>
         <View style={styles.contentContainer}>

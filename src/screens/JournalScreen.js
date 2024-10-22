@@ -1,7 +1,7 @@
 import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { PaperProvider } from "react-native-paper";
-import Post from "../components/Post";
+import PostCard from "../components/PostCard";
 import MyFAB from "../components/MyFAB";
 
 const JournalScreen = () => {
@@ -54,7 +54,13 @@ const JournalScreen = () => {
         <ScrollView style={styles.scrollView}>
           {journalpostsArray.map((post, index) => (
             <View style={{ padding: 10 }} key={index}>
-              <Post heading={post.heading} content={post.content} />
+              <PostCard
+                heading={post.heading}
+                content={post.content}
+                onPress={() => {
+                  console.log("card");
+                }}
+              />
             </View>
           ))}
         </ScrollView>
