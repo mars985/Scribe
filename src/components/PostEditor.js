@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect } from "react";
 import {
   SafeAreaView,
   View,
@@ -11,21 +11,21 @@ import {
   Toolbar,
   useEditorBridge,
   useEditorContent,
-  useEffect,
 } from "@10play/tentap-editor";
 
-export const PostEditor = ({ postcontent }) => {
-  const initialContent = postcontent
-    ? postcontent
-    : `<p>This is a basic example!</p>`;
+export const PostEditor = ({ postIndex,postHeading, postContent, onSave }) => {
+  const initialContent = postContent ? postContent : `<p>No data found</p>`;
 
   const editor = useEditorBridge({
     autofocus: false,
     avoidIosKeyboard: true,
     initialContent,
   });
-
-  const content = useEditorContent(editor, { type: "json" });
+  const content = useEditorContent(editor, { type: "html" });
+  useEffect(() => {
+    // Will render each time content is updated and call onSave
+    content && onSave(postHeading, content, postIndex);
+  }, [content]);
 
   return (
     <SafeAreaView style={exampleStyles.fullScreen}>
