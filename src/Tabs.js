@@ -8,15 +8,15 @@ import EditorScreen from "./screens/EditorScreen";
 // const HomeRoute = () => <Text>Journal</Text>;
 const HomeRoute = () => <JournalScreen />;
 
-// const TasksRoute = () => <TasksScreen/>
-const TasksRoute = () => <EditorScreen postcontent="hello world" />;
+const TasksRoute = () => <TasksScreen/>
+// const TasksRoute = () => <EditorScreen postcontent="hello world" />;
 
 const SettingsRoute = () => <Text>Settings</Text>;
 
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
 const MyComponent = () => {
-  const [index, setIndex] = React.useState(1);
+  const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
       key: "journal",

@@ -4,10 +4,14 @@ import { Text } from "react-native-paper";
 
 import { PostEditor } from "../components/PostEditor";
 
-const EditorScreen = ({heading, postcontent}) => {
+const EditorScreen = ({ route }) => {
+  const { heading, postcontent } = route.params;
+
   return (
     <View style={{ flex: 1 }}>
-      {/* <Text>hello</Text> */}
+      <Text style={{ fontSize: 24, padding: 10, fontWeight: "bold" }}>
+        {heading}
+      </Text>
       <PostEditor postcontent={postcontent} />
     </View>
   );
