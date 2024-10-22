@@ -12,7 +12,7 @@ const SettingsRoute = () => <Text>Settings</Text>;
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
 const MyComponent = () => {
-  const [index, setIndex] = React.useState(0);
+  const [index, setIndex] = React.useState(1);
   const [routes] = React.useState([
     {
       key: "journal",

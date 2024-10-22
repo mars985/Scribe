@@ -6,7 +6,7 @@ import SafeViewAndroid from "./src/components/SafeViewAndroid";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function App() {
-  logg();
+  // logg();
 
   return (
     <SafeAreaView style={SafeViewAndroid.AndroidSafeArea}>

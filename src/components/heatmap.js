@@ -1,6 +1,6 @@
 import { LineChart, ContributionGraph } from "react-native-chart-kit";
 
-import { View, Text, Dimensions } from "react-native";
+import { View, Text, Dimensions, ScrollView } from "react-native";
 import { getCurrentDate } from "../database/util";
 
 const component = () => {
@@ -55,17 +55,16 @@ const component = () => {
 };
 
 const commitsData = [
+  { date: "2024-08-30", count: 4 },
+  { date: "2024-09-05", count: 2 },
+  { date: "2024-10-01", count: 2 },
   { date: "2024-10-02", count: 1 },
   { date: "2024-10-03", count: 2 },
   { date: "2024-10-04", count: 3 },
   { date: "2024-10-05", count: 4 },
   { date: "2024-10-06", count: 5 },
-  { date: "2024-10-30", count: 2 },
-  { date: "2024-10-31", count: 3 },
-  { date: "2024-10-01", count: 2 },
-  { date: "2024-10-02", count: 4 },
-  { date: "2024-09-05", count: 2 },
-  { date: "2024-08-30", count: 4 },
+  { date: "2024-10-20", count: 4 },
+  { date: "2024-10-22", count: 4 },
 ];
 
 const chartConfig = {
@@ -76,15 +75,20 @@ const chartConfig = {
 };
 
 const component2 = () => {
+  // console.log("heatmap " + getCurrentDate());
   return (
-    <ContributionGraph
-      values={commitsData}
-      endDate={getCurrentDate()}
-      numDays={100}
-      width={Dimensions.get("window").width}
-      height={220}
-      chartConfig={chartConfig}
-    />
+    <ScrollView horizontal>
+      <ContributionGraph
+        values={commitsData}
+        endDate={getCurrentDate()}
+        horizontal
+        numDays={112}
+        // startDate={new Date(new Date().setDate(new Date().getDate() - 100))}
+        width={Dimensions.get("window").width}
+        height={220}
+        chartConfig={chartConfig}
+      />
+    </ScrollView>
   );
 };
 
