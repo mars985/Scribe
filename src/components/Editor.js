@@ -1,25 +1,33 @@
-import React from 'react';
+import React from "react";
 import {
   SafeAreaView,
   View,
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
-} from 'react-native';
-import { RichText, Toolbar, useEditorBridge } from '@10play/tentap-editor';
+} from "react-native";
+import {
+  RichText,
+  Toolbar,
+  useEditorBridge,
+  useEditorContent,
+  useEffect,
+} from "@10play/tentap-editor";
 
 export const Basic = () => {
   const editor = useEditorBridge({
-    autofocus: true,
+    autofocus: false,
     avoidIosKeyboard: true,
     initialContent,
   });
+
+  const content = useEditorContent(editor, { type: "json" });
 
   return (
     <SafeAreaView style={exampleStyles.fullScreen}>
       <RichText editor={editor} />
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={exampleStyles.keyboardAvoidingView}
       >
         <Toolbar editor={editor} />
@@ -33,8 +41,8 @@ const exampleStyles = StyleSheet.create({
     flex: 1,
   },
   keyboardAvoidingView: {
-    position: 'absolute',
-    width: '100%',
+    position: "absolute",
+    width: "100%",
     bottom: 0,
   },
 });
