@@ -4,18 +4,6 @@ const STORAGE_KEY = "@posts2";
 
 export const getPosts = async () => {
   try {
-    const defaultvar = [
-      {
-        heading: "2024-10-29 13.00",
-        content:
-          "Mauris vel mi sed nulla fringilla consectetur. Etiam aliquet turpis quis ligula sodales, a tincidunt nisl scelerisque. Proin blandit, nulla sit amet scelerisque dapibus, libero magna aliquam nunc, vel faucibus purus eros eget libero.",
-      },
-      {
-        heading: "2024-10-30 10.30",
-        content:
-          "Fusce euismod ex sit amet justo auctor, eu pretium nisi aliquet. Nulla sollicitudin nec libero nec mollis. Ut ac urna a justo scelerisque sollicitudin ut vitae ligula.",
-      },
-    ];
     const jsonValue = await AsyncStorage.getItem(STORAGE_KEY);
     return jsonValue != null ? JSON.parse(jsonValue) : [];
   } catch (error) {
@@ -24,7 +12,31 @@ export const getPosts = async () => {
   }
 };
 
-export const savePost = async (newPost) => {
+export const onSave = async (postHeading, contentToSave, postIndex) => {
+  try {
+    if (postIndex !== undefined && postIndex >= 0) {
+      // Update existing post
+      await updatePost(postIndex, {
+        heading: postHeading,
+        content: contentToSave,
+      });
+    } else {
+      // Save new post
+      await saveNewPost({ content: contentToSave, heading: postHeading });
+    }
+  } catch (error) {
+    console.error("Error saving content", error);
+  }
+  // logger();
+  function logger() {
+    console.log("h " + postHeading);
+    console.log("c " + contentToSave);
+    console.log("i " + postIndex);
+    console.log("");
+  }
+};
+
+export const saveNewPost = async (newPost) => {
   try {
     const posts = await getPosts();
     posts.push(newPost);
