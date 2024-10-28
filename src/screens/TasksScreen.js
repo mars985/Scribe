@@ -1,33 +1,97 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Card, Title, PaperProvider } from "react-native-paper";
+import {
+  Card,
+  Dialog,
+  Title,
+  PaperProvider,
+  Portal,
+  TextInput,
+  Button,
+} from "react-native-paper";
+
 import Heatmap from "../components/MyHeatmap";
 import MyFAB from "../components/MyFAB";
-import {
-  clearTasks,
-  createNewTask,
-  TASKUPDATER,
-  updateTask,
-} from "../database/storageTasks";
-import { getCurrentDate } from "../database/util";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { getTasks } from "../database/storageTasks";
 
 const TasksScreen = () => {
-  const heatmapArray = [1, 2, 3, 4];
-  const taskHeadings = ["Task1", "Task2", "Task3", "Task4"];
+  const [tasksArray, setTasksArray] = useState([]);
+
+  const setTasks = async () => setTasksArray(await getTasks());
+
+  useEffect(
+    React.useCallback(() => {
+      setTasks();
+    }, [])
+  );
+
+  const [visible, setVisible] = useState(false);
+  const showDialog = () => setVisible(true);
+  const hideDialog = () => setVisible(false);
+
+  const [textName, setTextName] = React.useState("");
+  const [textDescription, setTextDescription] = React.useState("");
+
+  const handleOnPress = () => {
+    showDialog();
+  };
+
+  const MyDialog = () => {
+    return (
+      <Portal>
+        <Dialog visible={visible} onDismiss={hideDialog}>
+          <Dialog.Title>Alert</Dialog.Title>
+          <Dialog.Content>
+            <TextInput
+              label="Name"
+              value={textName}
+              onChangeText={(textName) => setTextName(textName)}
+            />
+            <TextInput
+              label="Description"
+              value={textDescription}
+              onChangeText={(textDescription) =>
+                setTextDescription(textDescription)
+              }
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={hideDialog}>Add</Button>
+            <Button onPress={hideDialog}>Cancel</Button>
+          </Dialog.Actions>
+        </Dialog>
+      </Portal>
+    );
+  };
+
+  const commitsData = [
+    { date: "2024-08-30", count: 4 },
+    { date: "2024-09-05", count: 2 },
+    { date: "2024-09-15", count: 3 },
+    { date: "2024-10-01", count: 2 },
+    { date: "2024-10-02", count: 1 },
+    { date: "2024-10-03", count: 2 },
+    { date: "2024-10-04", count: 3 },
+    { date: "2024-10-05", count: 4 },
+    { date: "2024-10-06", count: 5 },
+    { date: "2024-10-20", count: 4 },
+    { date: "2024-10-22", count: 4 },
+  ];
 
   return (
     <PaperProvider>
       <View style={{ flex: 1 }}>
-        <ScrollView style={styles.scrollView}>
-          {heatmapArray.map((_, index) => (
+        <ScrollView
+          style={styles.scrollView}
+          keyboardShouldPersistTaps="handled"
+        >
+          {tasksArray.map((_, index) => (
             <View key={index}>
               <Card style={styles.card}>
                 <Card.Content>
                   <Title style={styles.heading}>{taskHeadings[index]}</Title>
-
                   <View style={styles.contentContainer}>
-                    <Heatmap />
+                    <Heatmap commitsData={commitsData} />
                   </View>
                 </Card.Content>
               </Card>
@@ -35,23 +99,14 @@ const TasksScreen = () => {
           ))}
         </ScrollView>
 
-        <MyFAB icon="plus" onPress={onPressFAB} label={"Add Task"} />
+        {visible ? (
+          <MyDialog />
+        ) : (
+          <MyFAB icon="plus" onPress={handleOnPress} label={"Add Task"} />
+        )}
       </View>
     </PaperProvider>
   );
-};
-
-const onPressFAB = async () => {
-  func();
-};
-
-const func = async () => {
-  clearTasks();
-  index = 1;
-  date = getCurrentDate();
-  count = 12;
-  // await createNewTask("TEST", "more test");
-  await updateTask(index, date, count);
 };
 
 const styles = StyleSheet.create({
@@ -65,7 +120,6 @@ const styles = StyleSheet.create({
     margin: 10,
     borderRadius: 8,
     elevation: 2,
-    // backgroundColor: "#edede9",
   },
   contentContainer: {
     position: "relative",

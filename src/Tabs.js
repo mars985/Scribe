@@ -3,20 +3,19 @@ import { BottomNavigation, Text } from "react-native-paper";
 
 import TasksScreen from "./screens/TasksScreen";
 import JournalScreen from "./screens/JournalScreen";
-import EditorScreen from "./screens/EditorScreen";
+import SettingsScreen from "./screens/SettingsScreen";
 
-// const HomeRoute = () => <Text>Journal</Text>;
 const HomeRoute = () => <JournalScreen />;
 
 const TasksRoute = () => <TasksScreen/>
-// const TasksRoute = () => <EditorScreen postcontent="hello world" />;
 
 const SettingsRoute = () => <Text>Settings</Text>;
+// const SettingsRoute = () => <SettingsScreen/>;
 
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
 const MyComponent = () => {
-  const [index, setIndex] = React.useState(1);
+  const [index, setIndex] = React.useState(2);
   const [routes] = React.useState([
     {
       key: "journal",

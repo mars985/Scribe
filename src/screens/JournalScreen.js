@@ -12,24 +12,19 @@ import { getCurrentDate, getCurrentTime } from "../database/util";
 const JournalScreen = () => {
   const navigation = useNavigation();
   const [journalpostsArray, setJournalPostsArray] = useState([]);
+  
+  const setPosts = async () => setJournalPostsArray(await getPosts());
 
   useFocusEffect(
     React.useCallback(() => {
-      const fetchAndSetPosts = async () => {
-        const posts = await getPosts();
-        setJournalPostsArray(posts);
-      };
-
-      fetchAndSetPosts();
+      setPosts();
     }, [])
   );
 
   const deleteThisPost = async (postIndex) => {
     await deletePost(postIndex);
-    setPost();
+    setPosts();
   };
-
-  const setPost = async () => setJournalPostsArray(await getPosts());
 
   const showDeleteAlert = (index) => {
     Alert.alert("Delete Post", "Are you sure you want to delete?", [
@@ -52,7 +47,7 @@ const JournalScreen = () => {
 
     const newPost = { heading: newHeading, content: newContent };
     await savePost(newPost);
-    await setPost();
+    await setPosts();
     // console.log(newPost);
   };
 
