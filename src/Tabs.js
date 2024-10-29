@@ -8,8 +8,7 @@ const HomeRoute = () => <JournalScreen />;
 
 const TasksRoute = () => <TasksScreen/>
 
-const SettingsRoute = () => <Text>Settings</Text>;
-// const SettingsRoute = () => <SettingsScreen/>;
+const SettingsRoute = () => <SettingsScreen/>;
 
 const NotificationsRoute = () => <Text>Notifications</Text>;
 

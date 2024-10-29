@@ -58,7 +58,7 @@ export const saveNewTask = async (newTask) => {
 
 export const deleteTask = async (index) => {
   try {
-    const tasks = getTasks();
+    const tasks = await getTasks();
     if (index >= 0 && index < tasks.length) {
       tasks.splice(index, 1);
       const jsonValue = JSON.stringify(tasks);

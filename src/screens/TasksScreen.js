@@ -1,90 +1,62 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
-import {
-  Card,
-  Dialog,
-  Title,
-  PaperProvider,
-  Portal,
-  TextInput,
-  Button,
-} from "react-native-paper";
+import { Alert, ScrollView, StyleSheet, View, Pressable } from "react-native";
+import { Card, Title, PaperProvider, Portal } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
 
 import Heatmap from "../components/MyHeatmap";
 import MyFAB from "../components/MyFAB";
-import { createNewTask, getTasks } from "../database/storageTasks";
+import TaskCreationDialog from "../components/TaskCreationDialog";
+import DeleteDialog from "../components/DeleteDialog";
 
-const MyDialog = ({
-  visible,
-  hideDialog,
-  textName,
-  setTextName,
-  textDescription,
-  setTextDescription,
-  createTask,
-}) => (
-  <Dialog visible={visible} onDismiss={hideDialog}>
-    <Dialog.Title>Add Task</Dialog.Title>
-    <Dialog.Content>
-      <TextInput
-        label="Name"
-        value={textName}
-        onChangeText={(text) => setTextName(text)}
-      />
-      <TextInput
-        label="Description"
-        value={textDescription}
-        onChangeText={(text) => setTextDescription(text)}
-      />
-    </Dialog.Content>
-    <Dialog.Actions>
-      <Button onPress={hideDialog}>Cancel</Button>
-      <Button onPress={createTask}>Add</Button>
-    </Dialog.Actions>
-  </Dialog>
-);
+import { createNewTask, getTasks, deleteTask } from "../database/storageTasks";
 
 const TasksScreen = () => {
   const [tasksArray, setTasksArray] = useState([]);
   const [visible, setVisible] = useState(false);
   const [textName, setTextName] = useState("");
   const [textDescription, setTextDescription] = useState("");
+  const [deleteDialogVisible, setDeleteDialogVisible] = useState(false);
+  const [selectedTaskIndex, setSelectedTaskIndex] = useState(null);
 
   const setTasks = async () => setTasksArray(await getTasks());
 
-  useEffect(() => {
-    setTasks();
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      setTasks();
+    }, [])
+  );
 
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
   const createTask = async () => {
     await createNewTask(textName, textDescription);
-    setTextName(""); // Clear the input fields after task creation
+    setTextName("");
     setTextDescription("");
     hideDialog();
-    setTasks(); // Update the tasks list
+    setTasks();
   };
 
-  const commitsData = [
-    { date: "2024-08-30", count: 4 },
-    { date: "2024-09-05", count: 2 },
-    { date: "2024-09-15", count: 3 },
-    { date: "2024-10-01", count: 2 },
-    { date: "2024-10-02", count: 1 },
-    { date: "2024-10-03", count: 2 },
-    { date: "2024-10-04", count: 3 },
-    { date: "2024-10-05", count: 4 },
-    { date: "2024-10-06", count: 5 },
-    { date: "2024-10-20", count: 4 },
-    { date: "2024-10-22", count: 4 },
-  ];
+  const showDeleteDialog = (index) => {
+    setSelectedTaskIndex(index);
+    setDeleteDialogVisible(true);
+  };
+
+  const hideDeleteDialog = () => {
+    setDeleteDialogVisible(false);
+    setSelectedTaskIndex(null);
+  };
+
+  const deleteThisTask = async () => {
+    await deleteTask(selectedTaskIndex);
+    hideDeleteDialog();
+    setTasks(); // Refresh task list
+  };
 
   return (
     <PaperProvider>
       <Portal>
-        <MyDialog
+        <TaskCreationDialog
           visible={visible}
           hideDialog={hideDialog}
           textName={textName}
@@ -92,6 +64,13 @@ const TasksScreen = () => {
           textDescription={textDescription}
           setTextDescription={setTextDescription}
           createTask={createTask}
+        />
+        <DeleteDialog
+          visible={deleteDialogVisible}
+          onCancel={hideDeleteDialog}
+          onOK={deleteThisTask}
+          title={"Delete Task"}
+          message={"Are you sure you want to delete this task?"}
         />
       </Portal>
       <View style={{ flex: 1 }}>
@@ -101,14 +80,24 @@ const TasksScreen = () => {
         >
           {tasksArray.map((task, index) => (
             <View key={index}>
-              <Card style={styles.card}>
-                <Card.Content>
-                  <Title style={styles.heading}>{task.name}</Title>
-                  <View style={styles.contentContainer}>
-                    <Heatmap commitsData={task["data"]} />
-                  </View>
-                </Card.Content>
-              </Card>
+              <Pressable
+                onPress={() => {
+                  console.log(index);
+                }}
+                onLongPress={() => {
+                  setSelectedTaskIndex(index);
+                  showDeleteDialog(index);
+                }}
+              >
+                <Card style={styles.card}>
+                  <Card.Content>
+                    <Title style={styles.heading}>{task.name}</Title>
+                    <View style={styles.contentContainer}>
+                      <Heatmap commitsData={task["data"]} />
+                    </View>
+                  </Card.Content>
+                </Card>
+              </Pressable>
             </View>
           ))}
         </ScrollView>

@@ -13,9 +13,7 @@ const chartConfig = {
   backgroundGradientTo: "#F8F3F9",
 };
 
-const component2 = ({ commitsData }) => {
-  // console.log("heatmap " + getCurrentDate());
-
+const MyHeatmap = ({ commitsData }) => {
   return (
     <ScrollView horizontal>
       <ContributionGraph
@@ -32,4 +30,4 @@ const component2 = ({ commitsData }) => {
   );
 };
 
-export default component2;
+export default MyHeatmap;
