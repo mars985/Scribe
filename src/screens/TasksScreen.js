@@ -12,56 +12,59 @@ import {
 
 import Heatmap from "../components/MyHeatmap";
 import MyFAB from "../components/MyFAB";
-import { getTasks } from "../database/storageTasks";
+import { createNewTask, getTasks } from "../database/storageTasks";
+
+const MyDialog = ({
+  visible,
+  hideDialog,
+  textName,
+  setTextName,
+  textDescription,
+  setTextDescription,
+  createTask,
+}) => (
+  <Dialog visible={visible} onDismiss={hideDialog}>
+    <Dialog.Title>Add Task</Dialog.Title>
+    <Dialog.Content>
+      <TextInput
+        label="Name"
+        value={textName}
+        onChangeText={(text) => setTextName(text)}
+      />
+      <TextInput
+        label="Description"
+        value={textDescription}
+        onChangeText={(text) => setTextDescription(text)}
+      />
+    </Dialog.Content>
+    <Dialog.Actions>
+      <Button onPress={hideDialog}>Cancel</Button>
+      <Button onPress={createTask}>Add</Button>
+    </Dialog.Actions>
+  </Dialog>
+);
 
 const TasksScreen = () => {
   const [tasksArray, setTasksArray] = useState([]);
+  const [visible, setVisible] = useState(false);
+  const [textName, setTextName] = useState("");
+  const [textDescription, setTextDescription] = useState("");
 
   const setTasks = async () => setTasksArray(await getTasks());
 
-  useEffect(
-    React.useCallback(() => {
-      setTasks();
-    }, [])
-  );
+  useEffect(() => {
+    setTasks();
+  }, []);
 
-  const [visible, setVisible] = useState(false);
   const showDialog = () => setVisible(true);
   const hideDialog = () => setVisible(false);
 
-  const [textName, setTextName] = React.useState("");
-  const [textDescription, setTextDescription] = React.useState("");
-
-  const handleOnPress = () => {
-    showDialog();
-  };
-
-  const MyDialog = () => {
-    return (
-      <Portal>
-        <Dialog visible={visible} onDismiss={hideDialog}>
-          <Dialog.Title>Alert</Dialog.Title>
-          <Dialog.Content>
-            <TextInput
-              label="Name"
-              value={textName}
-              onChangeText={(textName) => setTextName(textName)}
-            />
-            <TextInput
-              label="Description"
-              value={textDescription}
-              onChangeText={(textDescription) =>
-                setTextDescription(textDescription)
-              }
-            />
-          </Dialog.Content>
-          <Dialog.Actions>
-            <Button onPress={hideDialog}>Add</Button>
-            <Button onPress={hideDialog}>Cancel</Button>
-          </Dialog.Actions>
-        </Dialog>
-      </Portal>
-    );
+  const createTask = async () => {
+    await createNewTask(textName, textDescription);
+    setTextName(""); // Clear the input fields after task creation
+    setTextDescription("");
+    hideDialog();
+    setTasks(); // Update the tasks list
   };
 
   const commitsData = [
@@ -80,16 +83,27 @@ const TasksScreen = () => {
 
   return (
     <PaperProvider>
+      <Portal>
+        <MyDialog
+          visible={visible}
+          hideDialog={hideDialog}
+          textName={textName}
+          setTextName={setTextName}
+          textDescription={textDescription}
+          setTextDescription={setTextDescription}
+          createTask={createTask}
+        />
+      </Portal>
       <View style={{ flex: 1 }}>
         <ScrollView
           style={styles.scrollView}
           keyboardShouldPersistTaps="handled"
         >
-          {tasksArray.map((_, index) => (
+          {tasksArray.map((task, index) => (
             <View key={index}>
               <Card style={styles.card}>
                 <Card.Content>
-                  <Title style={styles.heading}>{taskHeadings[index]}</Title>
+                  <Title style={styles.heading}>{task.name}</Title>
                   <View style={styles.contentContainer}>
                     <Heatmap commitsData={commitsData} />
                   </View>
@@ -99,11 +113,7 @@ const TasksScreen = () => {
           ))}
         </ScrollView>
 
-        {visible ? (
-          <MyDialog />
-        ) : (
-          <MyFAB icon="plus" onPress={handleOnPress} label={"Add Task"} />
-        )}
+        <MyFAB icon="plus" onPress={showDialog} label={"Add Task"} />
       </View>
     </PaperProvider>
   );

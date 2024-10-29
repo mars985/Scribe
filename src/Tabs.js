@@ -3,7 +3,6 @@ import { BottomNavigation, Text } from "react-native-paper";
 
 import TasksScreen from "./screens/TasksScreen";
 import JournalScreen from "./screens/JournalScreen";
-import SettingsScreen from "./screens/SettingsScreen";
 
 const HomeRoute = () => <JournalScreen />;
 
@@ -15,7 +14,7 @@ const SettingsRoute = () => <Text>Settings</Text>;
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
 const MyComponent = () => {
-  const [index, setIndex] = React.useState(2);
+  const [index, setIndex] = React.useState(1);
   const [routes] = React.useState([
     {
       key: "journal",
