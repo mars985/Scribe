@@ -105,7 +105,7 @@ const TasksScreen = () => {
                 <Card.Content>
                   <Title style={styles.heading}>{task.name}</Title>
                   <View style={styles.contentContainer}>
-                    <Heatmap commitsData={commitsData} />
+                    <Heatmap commitsData={task["data"]} />
                   </View>
                 </Card.Content>
               </Card>

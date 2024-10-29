@@ -15,6 +15,7 @@ const chartConfig = {
 
 const component2 = ({ commitsData }) => {
   // console.log("heatmap " + getCurrentDate());
+
   return (
     <ScrollView horizontal>
       <ContributionGraph

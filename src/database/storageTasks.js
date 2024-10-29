@@ -24,7 +24,7 @@ export const getTasks = async () => {
 
 export const createNewTask = async (taskName, taskDescription) => {
   try {
-    const newTask = { name: taskName, description: taskDescription, data: {} };
+    const newTask = { name: taskName, description: taskDescription, data: [] };
     await saveNewTask(newTask);
   } catch (error) {
     console.error("Error creating task", error);
