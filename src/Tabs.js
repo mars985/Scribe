@@ -6,9 +6,10 @@ import JournalScreen from "./screens/JournalScreen";
 
 const HomeRoute = () => <JournalScreen />;
 
-const TasksRoute = () => <TasksScreen/>
+const TasksRoute = () => <TasksScreen />;
 
-const SettingsRoute = () => <SettingsScreen/>;
+const SettingsRoute = () => <Text>SettingsScreen</Text>;
+// const SettingsRoute = () => <SettingsScreen/>;
 
 const NotificationsRoute = () => <Text>Notifications</Text>;
 
