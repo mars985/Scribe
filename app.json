@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-iconrtghjk.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.mars985.Scribe"

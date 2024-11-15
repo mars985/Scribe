@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import { ScrollView, StyleSheet, View, Pressable } from "react-native";
-import { Card, Title, PaperProvider, Portal, Dialog } from "react-native-paper";
+import {
+  Card,
+  Title,
+  PaperProvider,
+  Portal,
+  Dialog,
+  TextInput,
+  Button,
+} from "react-native-paper";
 import { useFocusEffect } from "@react-navigation/native";
 
 import Heatmap from "../components/MyHeatmap";
 import MyFAB from "../components/MyFAB";
 import TaskCreationDialog from "../components/TaskCreationDialog";
 import DeleteDialog from "../components/DeleteDialog";
-import MyDatePicker from "../components/MyDateTimePicker";
 
-import { createNewTask, getTasks, deleteTask } from "../database/storageTasks";
+import {
+  createNewTask,
+  getTasks,
+  deleteTask,
+  updateTask,
+} from "../database/storageTasks";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 
 const TasksScreen = () => {
@@ -64,15 +76,45 @@ const TasksScreen = () => {
 
   const showUpdateDialog = () => setDatePickerVisible(true);
 
-  const datePickerOnConfirm = (event, selectedDate) => {
+  const datePickerOnConfirm = (selectedDate) => {
     setDatePickerVisible(false);
     if (selectedDate) {
-      setDate(selectedDate);
-      console.log("Selected date:", selectedDate);
+      function getDateString(dateInput) {
+        const funcDate = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+      
+        if (isNaN(funcDate.getTime())) {
+          throw new Error("Invalid funcDate input");
+        }
+      
+        // Use local time instead of UTC to avoid timezone issues
+        const year = funcDate.getFullYear();
+        const month = String(funcDate.getMonth() + 1).padStart(2, "0");
+        const day = String(funcDate.getDate()).padStart(2, "0");
+      
+        return `${year}-${month}-${day}`;
+      }      
+      const formattedDate = getDateString(selectedDate);
+      setDate(formattedDate);
+
+      showCountDialog();
     }
   };
 
   const datePickeronDismiss = () => setDatePickerVisible(false);
+
+  const [count, setCount] = useState(0);
+  const [countDialogVisible, setCountDialogVisible] = useState(false);
+
+  const showCountDialog = () => setCountDialogVisible(true);
+  const hideCountDialog = () => setCountDialogVisible(false);
+
+  const onCountConfirm = () => {
+    hideCountDialog();
+    console.log("Selected date:", date);
+    console.log(count);
+    updateTask(selectedTaskIndex, date, count);
+  };
+  const onCountCancel = () => hideCountDialog();
 
   return (
     <PaperProvider>
@@ -101,13 +143,21 @@ const TasksScreen = () => {
             onChange={datePickerOnConfirm}
           />
         )}
-        {/* <MyDatePicker
-          visible={datePickerVisible}
-          onConfirm={datePickerOnConfirm}
-          onDismiss={datePickeronDismiss}
-          date={date}
-          setDate={setDate}
-        /> */}
+        <Dialog visible={countDialogVisible} onDismiss={hideCountDialog}>
+          <Dialog.Content>
+            <Dialog.Title children={""} />
+            <TextInput
+              keyboardType="numeric"
+              label={"Count"}
+              onChangeText={setCount}
+              autoFocus
+            />
+          </Dialog.Content>
+          <Dialog.Actions>
+            <Button onPress={onCountCancel}>Cancel</Button>
+            <Button onPress={onCountConfirm}>Add</Button>
+          </Dialog.Actions>
+        </Dialog>
       </Portal>
       <View style={{ flex: 1 }}>
         <ScrollView
@@ -118,7 +168,8 @@ const TasksScreen = () => {
             <View key={index}>
               <Pressable
                 onPress={() => {
-                  console.log(index);
+                  setSelectedTaskIndex(index);
+                  showUpdateDialog();
                 }}
                 onLongPress={() => {
                   setSelectedTaskIndex(index);
@@ -138,7 +189,7 @@ const TasksScreen = () => {
           ))}
         </ScrollView>
 
-        <MyFAB icon="plus" onPress={showUpdateDialog} label={"Add Task"} />
+        <MyFAB icon="plus" onPress={showTaskDialog} label={"Add Task"} />
       </View>
     </PaperProvider>
   );
