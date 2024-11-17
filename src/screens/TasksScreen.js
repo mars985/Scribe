@@ -76,6 +76,9 @@ const TasksScreen = () => {
 
   const showUpdateDialog = () => setDatePickerVisible(true);
 
+  const onDayPress = () => {};
+
+  //date picker dialog
   const datePickerOnConfirm = (event, selectedDate) => {
     setDatePickerVisible(false); // Hide the date picker
 
@@ -107,6 +110,7 @@ const TasksScreen = () => {
 
   const datePickeronDismiss = () => setDatePickerVisible(false);
 
+  // count dialog
   const [count, setCount] = useState(0);
   const [countDialogVisible, setCountDialogVisible] = useState(false);
 
@@ -120,6 +124,20 @@ const TasksScreen = () => {
   };
   const onCountCancel = () => hideCountDialog();
 
+  const getDefaultValue = () => {
+    if (!tasksArray || tasksArray.length === 0) {
+      console.warn("No tasks found");
+      return 0;
+    }
+
+    const selectedTask = tasksArray[selectedTaskIndex];
+    const existingEntryIndex = selectedTask.data.findIndex(
+      (entry) => entry.date === date
+    );
+    return selectedTask.data[existingEntryIndex].count;
+  };
+
+  //component
   return (
     <PaperProvider>
       <Portal>
@@ -148,13 +166,14 @@ const TasksScreen = () => {
           />
         )}
         <Dialog visible={countDialogVisible} onDismiss={hideCountDialog}>
+          <Dialog.Title>Set count for {date}</Dialog.Title>
           <Dialog.Content>
-            <Dialog.Title children={""} />
             <TextInput
               keyboardType="numeric"
               label={"Count"}
               onChangeText={setCount}
               autoFocus
+              defaultValue={getDefaultValue}
             />
           </Dialog.Content>
           <Dialog.Actions>
