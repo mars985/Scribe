@@ -1,7 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-import { getCurrentDate } from "../database/util";
-
 const TASK_KEY = "@tasks";
 
 export const clearTasks = async () => {
@@ -41,21 +39,6 @@ export const saveNewTask = async (newTask) => {
   }
 };
 
-// export const updateTask = async (index, updatedTask) => {
-//   try {
-//     const tasks = await getTasks(TASK_KEY);
-//     if (index >= 0 && index < tasks.length) {
-//       tasks[index] = updatedTask;
-//       const jsonValue = JSON.stringify(tasks);
-//       await AsyncStorage.setItem(TASK_KEY, jsonValue);
-//     } else {
-//       console.warn("Invalid index for updating task");
-//     }
-//   } catch (error) {
-//     console.error("Error updating data:", error);
-//   }
-// };
-
 export const deleteTask = async (index) => {
   try {
     const tasks = await getTasks();
@@ -71,44 +54,48 @@ export const deleteTask = async (index) => {
   }
 };
 
-// export const TASKUPDATER = async (index, date, count) => {
-// export const TASKUPDATER = async () => {
-//   index = 0;
-//   date = getCurrentDate();
-//   count = 3;
-//   try {
-//     const tasks = await getTasks(TASK_KEY);
-//     await createNewTask("test", "testdesc");
-
-//     if (index >= 0 && index < tasks.length) {
-//       // tasks[index] = updatedTask;
-//       // const jsonValue = JSON.stringify(tasks);
-//       // await AsyncStorage.setItem(TASK_KEY, jsonValue);
-//       const tasks = await getTasks(TASK_KEY);
-//       tasks[index][date] = count;
-//       console.log(tasks);
-//     } else {
-//       console.warn("Invalid index for updating task");
-//     }
-//   } catch (error) {
-//     console.error("Error updating data:", error);
-//   }
-// };
-
 export const updateTask = async (index, date, count) => {
   try {
     const tasks = await getTasks();
-    console.log(tasks);
-    if (tasks === null) {
+
+    if (!tasks || tasks.length === 0) {
       console.warn("No tasks found");
-    } else if (index >= 0 && index < tasks.length) {
+      return;
+    }
+
+    if (index >= 0 && index < tasks.length) {
       const taskToUpdate = tasks[index];
-      taskToUpdate[date] = count;
+
+      // Ensure the "data" property is an array
+      if (!Array.isArray(taskToUpdate.data)) {
+        taskToUpdate.data = [];
+      }
+
+      // Check if the date already exists in the "data" array
+      const existingEntryIndex = taskToUpdate.data.findIndex(
+        (entry) => entry.date === date
+      );
+
+      if (existingEntryIndex !== -1) {
+        // Update the count for the existing date
+        taskToUpdate.data[existingEntryIndex].count = count;
+      } else {
+        // Add a new entry for the date
+        taskToUpdate.data.push({ date, count });
+      }
+
+      // Update the task in the tasks array
       tasks[index] = taskToUpdate;
+
+      // Save updated tasks back to AsyncStorage
+      const jsonValue = JSON.stringify(tasks);
+      await AsyncStorage.setItem(TASK_KEY, jsonValue);
+
+      // console.log("Task updated successfully:", tasks);
+      // console.log("Updated task data:", JSON.stringify(taskToUpdate.data, null, 2));
     } else {
       console.warn("Invalid index for updating");
     }
-    console.log(tasks);
   } catch (error) {
     console.error("Error updating task", error);
   }

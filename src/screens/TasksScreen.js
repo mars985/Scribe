@@ -43,10 +43,10 @@ const TasksScreen = () => {
   const hideTaskDialog = () => setTaskDialogVisible(false);
 
   const createTask = async () => {
+    hideTaskDialog();
     await createNewTask(textName, textDescription);
     setTextName("");
     setTextDescription("");
-    hideTaskDialog();
     setTasks();
   };
 
@@ -76,27 +76,32 @@ const TasksScreen = () => {
 
   const showUpdateDialog = () => setDatePickerVisible(true);
 
-  const datePickerOnConfirm = (selectedDate) => {
-    setDatePickerVisible(false);
+  const datePickerOnConfirm = (event, selectedDate) => {
+    setDatePickerVisible(false); // Hide the date picker
+
+    if (event.type === "dismissed") return;
+
     if (selectedDate) {
-      function getDateString(dateInput) {
-        const funcDate = typeof dateInput === "string" ? new Date(dateInput) : dateInput;
-      
+      const getDateString = (dateInput) => {
+        const funcDate =
+          typeof dateInput === "string" ? new Date(dateInput) : dateInput;
+
         if (isNaN(funcDate.getTime())) {
-          throw new Error("Invalid funcDate input");
+          throw new Error("Invalid date input");
         }
-      
+
         // Use local time instead of UTC to avoid timezone issues
         const year = funcDate.getFullYear();
         const month = String(funcDate.getMonth() + 1).padStart(2, "0");
         const day = String(funcDate.getDate()).padStart(2, "0");
-      
-        return `${year}-${month}-${day}`;
-      }      
-      const formattedDate = getDateString(selectedDate);
-      setDate(formattedDate);
 
-      showCountDialog();
+        return `${year}-${month}-${day}`;
+      };
+
+      const formattedDate = getDateString(selectedDate);
+      setDate(formattedDate); // Update the state
+      console.log("Selected date:", formattedDate); // Log the formatted date
+      showCountDialog(); // Show the count dialog
     }
   };
 
@@ -110,9 +115,8 @@ const TasksScreen = () => {
 
   const onCountConfirm = () => {
     hideCountDialog();
-    console.log("Selected date:", date);
-    console.log(count);
     updateTask(selectedTaskIndex, date, count);
+    setTasks();
   };
   const onCountCancel = () => hideCountDialog();
 
@@ -170,6 +174,7 @@ const TasksScreen = () => {
                 onPress={() => {
                   setSelectedTaskIndex(index);
                   showUpdateDialog();
+                  // showCountDialog();
                 }}
                 onLongPress={() => {
                   setSelectedTaskIndex(index);

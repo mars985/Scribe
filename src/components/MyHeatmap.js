@@ -1,6 +1,6 @@
-import { LineChart, ContributionGraph } from "react-native-chart-kit";
+import { ContributionGraph } from "react-native-chart-kit";
 
-import { View, Text, Dimensions, ScrollView } from "react-native";
+import { Dimensions, ScrollView } from "react-native";
 import { getCurrentDate } from "../database/util";
 
 const chartConfig = {
