@@ -25,6 +25,11 @@ import {
   updateTask,
   setTASK,
 } from "../database/storageTasks";
+import {
+  setHeatMapColor,
+  getHeatMapColor
+} from "../database/storageSettings";
+
 
 const TasksScreen = () => {
   const [tasksArray, setTasksArray] = useState([]);
@@ -184,8 +189,6 @@ const TasksScreen = () => {
     const existingEntryIndex = selectedTask.data.findIndex(
       (entry) => entry.date === date
     );
-    console.log(selectedTask.data);
-    // console.log(existingEntryIndex);
     return existingEntryIndex === -1
       ? 0
       : selectedTask.data[existingEntryIndex].count;
@@ -199,7 +202,20 @@ const TasksScreen = () => {
     showCountDialog();
   };
 
-  //component
+  // settings
+  const [heatmapColors, setHeatmapColors] = useState([]);
+
+  useEffect(() => {
+    const fetchHeatmapColors = async () => {
+      const settings = await getHeatMapColor();
+      if (settings && settings.heatmap) {
+        setHeatmapColors(settings.heatmap.colors);
+      }
+    };
+    fetchHeatmapColors();
+  }, []);
+
+  // component
   return (
     <PaperProvider>
       <Portal>
@@ -270,6 +286,7 @@ const TasksScreen = () => {
                         commitsData={task["data"]}
                         onDayPress={onDayPress}
                         index={index}
+                        heatmapColors={heatmapColors}
                       />
                     </View>
                   </Card.Content>

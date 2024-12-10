@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const STORAGE_KEY = "@posts2";
+export const STORAGE_KEY = "@posts2";
 
 export const getPosts = async () => {
   try {

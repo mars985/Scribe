@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const TASK_KEY = "@tasks";
+export const TASK_KEY = "@tasks";
 
 export const clearTasks = async () => {
   try {
