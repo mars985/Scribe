@@ -247,7 +247,7 @@ const TasksScreen = () => {
               label={"Count"}
               onChangeText={setCount}
               autoFocus
-              defaultValue={getDefaultValue}
+              defaultValue={String(getDefaultValue())}
             />
           </Dialog.Content>
           <Dialog.Actions>
@@ -290,6 +290,7 @@ const TasksScreen = () => {
               </Pressable>
             </View>
           ))}
+          <View style={{ padding: 10 }}></View>
         </ScrollView>
 
         <MyFAB icon="plus" onPress={showTaskDialog} label={"Add Task"} />
