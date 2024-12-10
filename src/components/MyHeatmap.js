@@ -1,5 +1,5 @@
+import React, { useEffect, useRef } from "react";
 import { ContributionGraph } from "react-native-chart-kit";
-
 import { Dimensions, ScrollView } from "react-native";
 import { getCurrentDate } from "../database/util";
 
@@ -14,23 +14,34 @@ const chartConfig = {
 };
 
 const MyHeatmap = ({ commitsData, onDayPress, index }) => {
+  const scrollViewRef = useRef();
+
+  useEffect(() => {
+    // Scroll to the end when the component is mounted
+    scrollViewRef.current?.scrollToEnd({ animated: false });
+  }, [commitsData]);
+
   const handleDayPress = ({ date, count }) => {
     onDayPress(date, index);
     console.log(date);
     console.log(count);
   };
+
   return (
-    <ScrollView horizontal>
+    <ScrollView 
+      horizontal 
+      ref={scrollViewRef} 
+      contentContainerStyle={{ flexGrow: 1 }}
+    >
       <ContributionGraph
         values={commitsData}
         endDate={getCurrentDate()}
         horizontal
         numDays={112}
-        // startDate={new Date(new Date().setDate(new Date().getDate() - 100))}
         width={Dimensions.get("window").width}
         height={220}
         chartConfig={chartConfig}
-        onDayPress={handleDayPress}
+        // onDayPress={handleDayPress}
       />
     </ScrollView>
   );

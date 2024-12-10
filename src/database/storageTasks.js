@@ -17,7 +17,6 @@ export const getTasks = async () => {
   } catch (error) {
     console.error("Error reading data:", error);
   }
-
 };
 
 export const createNewTask = async (taskName, taskDescription) => {
@@ -34,6 +33,7 @@ export const saveNewTask = async (newTask) => {
     tasks.push(newTask);
     const jsonValue = JSON.stringify(tasks);
     await AsyncStorage.setItem(TASK_KEY, jsonValue);
+    // console.log(jsonValue)
   } catch (error) {
     console.error("Error saving task", error);
   }
@@ -99,4 +99,9 @@ export const updateTask = async (index, date, count) => {
   } catch (error) {
     console.error("Error updating task", error);
   }
+};
+
+export const setTASK = async (data) => {
+  const newTask = { name: "Breakfast", description: "wellbeing", data: data };
+  await saveNewTask(newTask);
 };

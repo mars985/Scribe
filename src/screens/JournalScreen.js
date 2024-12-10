@@ -91,6 +91,7 @@ const JournalScreen = () => {
               </Pressable>
             </View>
           ))}
+          <View style={{ padding: 10 }}></View>
         </ScrollView>
 
         <MyFAB icon="plus" label="Add" onPress={createNewPost} />
