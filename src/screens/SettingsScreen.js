@@ -56,8 +56,9 @@ const RadioButtonGroup = ({ options, initialChecked = "first", onPress }) => {
 
 export const SettingsScreen = () => {
   const options = [
-    { value: "first", label: "First" },
-    { value: "second", label: "Second" },
+    { value: "first", label: "Color 1" },
+    { value: "second", label: "Color 2" },
+    { value: "third", label: "Color 3" },
   ];
 
   const handleOptionPress = (value) => {

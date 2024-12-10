@@ -31,7 +31,7 @@ const MyHeatmap = ({ commitsData, onDayPress, index, heatmapColors }) => {
     ...chartConfig,
     color: (opacity = 1) => {
       const rgb = heatmapColors[index] || [0, 0, 0]; // Default color if index is invalid
-      return `rgba(${rgb.join(",")}, ${opacity})`;
+      return `rgba(38, 70, 83, ${opacity})`;
     },
   };
 
