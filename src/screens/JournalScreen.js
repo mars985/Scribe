@@ -63,6 +63,7 @@ const JournalScreen = () => {
       </Portal>
       <View style={{ flex: 1 }}>
         <ScrollView style={styles.scrollView}>
+          {/* <View style={{ padding: 10 }}></View> */}
           {journalPostsArray.map((post, index) => (
             <View style={styles.postContainer} key={index}>
               <Pressable
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F5F4F4",
   },
   postContainer: {
-    paddingTop: 10,
+    paddingTop: 15,
     paddingHorizontal: 10,
   },
 });

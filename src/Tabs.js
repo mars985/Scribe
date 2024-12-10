@@ -15,7 +15,7 @@ const SettingsRoute = () => <Text>SettingsScreen</Text>;
 const NotificationsRoute = () => <NotificationsScreen/>;
 
 const MyComponent = () => {
-  const [index, setIndex] = React.useState(1);
+  const [index, setIndex] = React.useState(0);
   const [routes] = React.useState([
     {
       key: "journal",

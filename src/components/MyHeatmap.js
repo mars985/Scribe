@@ -13,7 +13,12 @@ const chartConfig = {
   backgroundGradientTo: "#F8F3F9",
 };
 
-const MyHeatmap = ({ commitsData, onDayPress }) => {
+const MyHeatmap = ({ commitsData, onDayPress, index }) => {
+  const handleDayPress = ({ date, count }) => {
+    onDayPress(date, index);
+    console.log(date);
+    console.log(count);
+  };
   return (
     <ScrollView horizontal>
       <ContributionGraph
@@ -25,7 +30,7 @@ const MyHeatmap = ({ commitsData, onDayPress }) => {
         width={Dimensions.get("window").width}
         height={220}
         chartConfig={chartConfig}
-        onDayPress={onDayPress}
+        onDayPress={handleDayPress}
       />
     </ScrollView>
   );
