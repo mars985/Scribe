@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View, Pressable } from "react-native";
 import {
   Card,
@@ -25,11 +25,7 @@ import {
   updateTask,
   setTASK,
 } from "../database/storageTasks";
-import {
-  setHeatMapColor,
-  getHeatMapColor
-} from "../database/storageSettings";
-
+import { setSettings, getSettings } from "../database/storageSettings";
 
 const TasksScreen = () => {
   const [tasksArray, setTasksArray] = useState([]);
@@ -207,7 +203,7 @@ const TasksScreen = () => {
 
   useEffect(() => {
     const fetchHeatmapColors = async () => {
-      const settings = await getHeatMapColor();
+      const settings = await getSettings();
       if (settings && settings.heatmap) {
         setHeatmapColors(settings.heatmap.colors);
       }
@@ -285,8 +281,8 @@ const TasksScreen = () => {
                         key={JSON.stringify(task["data"])} // Force re-render on data change
                         commitsData={task["data"]}
                         onDayPress={onDayPress}
-                        index={index}
                         heatmapColors={heatmapColors}
+                        index={heatmapColors.index}
                       />
                     </View>
                   </Card.Content>
